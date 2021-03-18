@@ -36,6 +36,7 @@
     const game = new Phaser.Game(config);
 
     let player;
+    let cursors;
 
     function preload() {
       // load the PNG file
@@ -52,22 +53,22 @@
 
       // Parameters: layer name (or index) from Tiled, tileset, x, y
       const belowLayer = map.createStaticLayer("belowplayer", tileset, 0, 0);
-      player = this.physics.add.sprite(400, 350, "misa-front");
+      player = this.physics.add.sprite(24, 368, "misa-front");
       const worldLayer = map.createStaticLayer("world", tileset, 0, 0);
       const aboveLayer = map.createStaticLayer("aboveplayer", tileset, 0, 0);
 
       //worldLayer.setCollisionByProperty({ "collides": true });
       worldLayer.setCollision([323, 35, 289, 257, 225, 227, 3, 261, 258, 290, 293, 294, 226, 262]);
-      const debugGraphics = this.add.graphics().setAlpha(0.75);
-
+      
+     /*  const debugGraphics = this.add.graphics().setAlpha(0.75);
       worldLayer.renderDebug(debugGraphics, {
         tileColor: null, // Color of non-colliding tiles
         collidingTileColor: new Phaser.Display.Color(243, 134, 48, 255), // Color of colliding tiles
         faceColor: new Phaser.Display.Color(40, 39, 37, 255) // Color of colliding face edges
-      });
+      }); */
 
-      cursors = this.input.keyboard.createCursorKeys();
       this.physics.add.collider(player, worldLayer);
+      cursors = this.input.keyboard.createCursorKeys();
     }
 
     function update() {
