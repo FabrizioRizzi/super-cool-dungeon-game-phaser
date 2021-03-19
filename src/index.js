@@ -11,7 +11,7 @@ const config = {
   title: 'Super Cool Dungeon Game',
   transparent: true,
   physics: {
-    default: "arcade",
+    default: 'arcade',
     arcade: {
       gravity: { y: 0 } // Top down game, so no gravity
     }
