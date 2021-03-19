@@ -9,6 +9,7 @@ export default class Level01 extends Phaser.Scene {
     super({ key: 'Level01' });
     this.knight = undefined;
     this.doc = undefined;
+    this.redPotion = undefined;
     this.cursors = undefined;
     this.enemySpeed = 40;
   }
@@ -20,6 +21,7 @@ export default class Level01 extends Phaser.Scene {
     //LOAD SPRITESHEET
     this.load.spritesheet('knight', 'images/knight.png', { frameWidth: 16, frameHeight: 32 })
     this.load.spritesheet('doc', 'images/doc.png', { frameWidth: 16, frameHeight: 32 })
+    this.load.image('redpotion', 'images/redpotion.png')
 
     //LOAD MAP
     this.load.tilemapTiledJSON('level01map', 'maps/level01map.json')
@@ -41,6 +43,8 @@ export default class Level01 extends Phaser.Scene {
       .sprite(200, 80, 'doc')
       .setSize(16, 22)
       .setOffset(0, 10);
+
+    this.redPotion = this.physics.add.image(40, 120, 'redpotion')
 
     this.physics.add.collider(this.knight, worldLayer);
     this.physics.add.collider(this.doc, worldLayer, () => this.enemySpeed = -this.enemySpeed );
