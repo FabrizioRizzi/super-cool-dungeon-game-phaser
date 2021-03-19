@@ -1,7 +1,7 @@
 const createKnightAnimations = (anims) => {
   anims.create({
     key: 'knight-walk',
-    frames: anims.generateFrameNumbers('knight', { start: 0, end: 7 }),
+    frames: anims.generateFrameNumbers('knight'),
     frameRate: 24,
     repeat: -1
   })

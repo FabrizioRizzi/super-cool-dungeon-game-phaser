@@ -1,7 +1,7 @@
 const cretePumpkinAnimations = (anims) => {
   anims.create({
     key: 'pumpkin-walk',
-    frames: anims.generateFrameNumbers('pumpkin', { start: 0, end: 7 }),
+    frames: anims.generateFrameNumbers('pumpkin'),
     frameRate: 24,
     repeat: -1
   })
