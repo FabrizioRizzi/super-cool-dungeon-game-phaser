@@ -25,7 +25,7 @@ export default class Level02 extends Phaser.Scene {
     const tileset = map.addTilesetImage('tileset');
 
     // input, physics, add for debug purpose only
-    const { belowLayer, worldLayer, aboveLayer } = createBasycLayers(map, tileset, this.input, this.physics, this.add);
+    const { belowLayer, worldLayer, aboveLayer, nextLevel } = createBasycLayers(map, tileset, this.input, this.physics, this.add);
 
     this.pumpkin = this.physics.add
       .sprite(24, 368, 'pumpkin')
@@ -33,6 +33,7 @@ export default class Level02 extends Phaser.Scene {
       .setOffset(0, 10);
 
     this.physics.add.collider(this.pumpkin, worldLayer);
+    this.physics.add.collider(this.pumpkin, nextLevel, () => this.scene.start('Level01'));
     this.cursors = this.input.keyboard.createCursorKeys();
 
     createPumpkinAnimations(this.anims);
