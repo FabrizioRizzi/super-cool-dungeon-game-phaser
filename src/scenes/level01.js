@@ -60,16 +60,6 @@ export default class Level01 extends Phaser.Scene {
     const speed = 80;
     createPlayerMovements(this.knight, this.cursors, speed);
 
-    this.doc.body.setVelocityX(this.enemySpeed);
-    if (this.enemySpeed < 0) {
-      this.doc.setFlipX(true);
-    } else {
-      this.doc.setFlipX(false);
-    }
-
-    this.doc.anims.play('doc-walk', true);
-
-
     // Normalize and scale the velocity so that this.knight can't move faster along a diagonal
     this.knight.body.velocity.normalize().scale(speed);
 
@@ -79,5 +69,14 @@ export default class Level01 extends Phaser.Scene {
       this.knight.anims.play('knight-stop', true);
       this.knight.anims.stop();
     }
+
+    this.doc.body.setVelocityX(this.enemySpeed);
+    if (this.enemySpeed < 0) {
+      this.doc.setFlipX(true);
+    } else {
+      this.doc.setFlipX(false);
+    }
+
+    this.doc.anims.play('doc-walk', true);
   }
 }
