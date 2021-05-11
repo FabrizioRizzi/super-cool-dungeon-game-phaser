@@ -3,6 +3,7 @@ import createBasicLayers from '../layers/createBasicLayers';
 import createKnightAnimations from '../animations/createKnightAnimations';
 import createDocAnimations from '../animations/createDocAnimations';
 import createPlayerMovements from '../movements/createPlayerMovements';
+import game from '../index';
 
 export default class Level01 extends Phaser.Scene {
   constructor() {
@@ -12,6 +13,8 @@ export default class Level01 extends Phaser.Scene {
     this.redPotion = undefined;
     this.cursors = undefined;
     this.enemySpeed = 40;
+    this.scoreText = undefined;
+    this.score = 0;
   }
 
   preload() {
@@ -25,6 +28,7 @@ export default class Level01 extends Phaser.Scene {
 
     //LOAD MAP
     this.load.tilemapTiledJSON('level01map', 'maps/level01map.json')
+
   }
 
   create() {
@@ -33,6 +37,8 @@ export default class Level01 extends Phaser.Scene {
 
     // input, physics, add for debug purpose only
     const { belowLayer, worldLayer, aboveLayer, nextLevel } = createBasicLayers(map, tileset, this.input, this.physics, this.add);
+
+    this.scoreText = this.add.text(16, 16, 'Score: ' + this.score, { fontSize: '32px', fill: '#000' });
 
     this.knight = this.physics.add
       .sprite(24, 368, 'knight')
@@ -47,7 +53,12 @@ export default class Level01 extends Phaser.Scene {
     this.redPotion = this.physics.add.image(40, 120, 'redpotion')
 
     this.physics.add.collider(this.knight, worldLayer);
-    this.physics.add.collider(this.doc, worldLayer, () => this.enemySpeed = -this.enemySpeed );
+    this.physics.add.collider(this.knight, this.redPotion, () => {
+      this.redPotion.disableBody(true, true);
+      this.score += 10;
+      this.scoreText.setText('Score: ' + this.score);
+    });
+    this.physics.add.collider(this.doc, worldLayer, () => this.enemySpeed = -this.enemySpeed);
     this.physics.add.collider(this.knight, this.doc, () => this.scene.start('Level01'));
     this.physics.add.collider(this.knight, nextLevel, () => this.scene.start('Level02'));
     this.cursors = this.input.keyboard.createCursorKeys();

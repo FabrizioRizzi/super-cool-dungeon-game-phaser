@@ -45,7 +45,7 @@ export default class Level02 extends Phaser.Scene {
     this.physics.add.collider(this.knight, worldLayer);
     this.physics.add.collider(this.pumpkin, worldLayer, () => this.enemySpeed = -this.enemySpeed );
     this.physics.add.collider(this.knight, this.pumpkin, () => this.scene.start('Level02'));
-    this.physics.add.collider(this.knight, nextLevel, () => this.scene.start('Level02'));
+    this.physics.add.collider(this.knight, nextLevel, () => this.scene.start('Level01'));
     this.cursors = this.input.keyboard.createCursorKeys();
 
     createKnightAnimations(this.anims);
