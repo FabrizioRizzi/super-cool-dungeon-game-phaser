@@ -10,6 +10,7 @@ const createBasicLayers = (map, tileset, input, physics, add) => {
   nextLevel.setCollision([46, 83])
 
   aboveLayer.setDepth(10);
+  worldLayer.setDepth(10);
 
   // Debug graphics
   input.keyboard.once('keydown-DELETE', event => {
