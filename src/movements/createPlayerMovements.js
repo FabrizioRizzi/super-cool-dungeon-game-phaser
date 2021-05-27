@@ -5,9 +5,9 @@ const createPlayerMovements = (container, player, weapon, cursors, speed, player
 
   //Reset weapon position
   if (!weapon.flipX) {
-    weapon.setPosition(8, 4);
+    weapon.setPosition(5, 0);
   } else {
-    weapon.setPosition(-8, 4);
+    weapon.setPosition(-5, 0);
   }
   weapon.setAngle(0);
 
@@ -19,12 +19,12 @@ const createPlayerMovements = (container, player, weapon, cursors, speed, player
     container.body.setVelocityX(-speed);
     player.setFlipX(true);
     weapon.setFlipX(true);
-    weapon.setPosition(-8, 4);
+    weapon.setPosition(-5, 0);
   } else if (cursors.right.isDown) {
     container.body.setVelocityX(speed);
     player.setFlipX(false);
     weapon.setFlipX(false);
-    weapon.setPosition(8, 4);
+    weapon.setPosition(5, 0);
   }
 
   // Vertical movement
@@ -38,10 +38,10 @@ const createPlayerMovements = (container, player, weapon, cursors, speed, player
   if (cursors.space.isDown) {
     if (!weapon.flipX) {
       weapon.setAngle(90);
-      weapon.setPosition(12, 8);
+      weapon.setPosition(12, 4);
     } else {
       weapon.setAngle(-90);
-      weapon.setPosition(-12, 8);
+      weapon.setPosition(-12, 4);
     }
   }
 

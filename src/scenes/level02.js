@@ -3,23 +3,27 @@ import createBasycLayers from '../layers/createBasicLayers';
 import createKnightAnimations from '../animations/createKnightAnimations';
 import createPumpkinAnimations from '../animations/createPumpkinAnimations';
 import createPlayerMovements from '../movements/createPlayerMovements';
+import createEnemyHorizontalMovement from '../movements/createEnemyHorizontalMovement'; 
 
 export default class Level02 extends Phaser.Scene {
   constructor() {
     super({ key: 'Level02' });
     this.knight = undefined;
+    this.dagger = undefined;
     this.pumpkin = undefined;
     this.cursors = undefined;
+    this.playerSpeed = 80;
     this.enemySpeed = 40;
   }
 
   preload() {
     // LOAD IMAGES
-    this.load.image('tileset', 'images/tileset.png')
+    this.load.image('tileset', 'images/tileset.png');
 
     //LOAD SPRITESHEET
-    this.load.spritesheet('knight', 'images/knight.png', { frameWidth: 16, frameHeight: 32 })
-    this.load.spritesheet('pumpkin', 'images/pumpkin_dude.png', { frameWidth: 16, frameHeight: 32 })
+    this.load.spritesheet('knight', 'images/knight.png', { frameWidth: 16, frameHeight: 32 });
+    this.load.image('dagger', 'images/dagger.png');
+    this.load.spritesheet('pumpkin', 'images/pumpkin_dude.png', { frameWidth: 16, frameHeight: 32 });
 
     //LOAD MAP
     this.load.tilemapTiledJSON('level02map', 'maps/level02map.json')
@@ -31,49 +35,45 @@ export default class Level02 extends Phaser.Scene {
 
     // input, physics, add for debug purpose only
     const { belowLayer, worldLayer, aboveLayer, nextLevel } = createBasycLayers(map, tileset, this.input, this.physics, this.add);
-    
-    this.knight = this.physics.add
-      .sprite(24, 368, 'knight')
-      .setSize(16, 22)
-      .setOffset(0, 10);
 
+    /**************** ADD PLAYER CONTAINER FOR KNIGHT AND DAGGER **************************/
+    this.playerContainer = this.add
+      .container(24, 368)
+      .setSize(20, 22);
+
+    this.physics.world.enableBody(this.playerContainer);
+
+    this.knight = this.physics.add
+      .sprite(0, 0, 'knight')
+      .setSize(20, 22);
+
+    this.dagger = this.physics.add.image(8, 4, 'dagger');
+
+    this.playerContainer.add(this.knight);
+    this.playerContainer.add(this.dagger);
+
+    /**************** ADD ENEMY **************************/
     this.pumpkin = this.physics.add
       .sprite(48, 330, 'pumpkin')
       .setSize(16, 22)
       .setOffset(0, 10);
 
-    this.physics.add.collider(this.knight, worldLayer);
-    this.physics.add.collider(this.pumpkin, worldLayer, () => this.enemySpeed = -this.enemySpeed );
-    this.physics.add.collider(this.knight, this.pumpkin, () => this.scene.start('Level02'));
-    this.physics.add.collider(this.knight, nextLevel, () => this.scene.start('Level01'));
-    this.cursors = this.input.keyboard.createCursorKeys();
+    /**************** ADD COLLISIONS **************************/
+    this.physics.add.collider(this.playerContainer, worldLayer);
+    this.physics.add.collider(this.pumpkin, worldLayer, () => this.enemySpeed = -this.enemySpeed);
+    this.physics.add.collider(this.playerContainer, this.pumpkin, () => this.scene.start('Level02'));
+    this.physics.add.collider(this.playerContainer, nextLevel, () => this.scene.start('Level01'));
 
+    /**************** ADD ANIMATIONS **************************/
     createKnightAnimations(this.anims);
     createPumpkinAnimations(this.anims);
+
+    /**************** CURSORS **************************/
+    this.cursors = this.input.keyboard.createCursorKeys();
   }
 
   update() {
-    const speed = 80;
-    createPlayerMovements(this.knight, this.cursors, speed);
-
-    // Normalize and scale the velocity so that this.pumpkin can't move faster along a diagonal
-    this.knight.body.velocity.normalize().scale(speed);
-
-    if (this.cursors.left.isDown || this.cursors.right.isDown || this.cursors.up.isDown || this.cursors.down.isDown) {
-      this.knight.anims.play('knight-walk', true);
-    } else {
-      this.knight.anims.play('knight-stop', true);
-      this.knight.anims.stop();
-    }
-
-    this.pumpkin.body.setVelocityX(this.enemySpeed);
-    if (this.enemySpeed < 0) {
-      this.pumpkin.setFlipX(true);
-    } else {
-      this.pumpkin.setFlipX(false);
-    }
-
-    this.pumpkin.anims.play('pumpkin-walk', true);
-
+    createPlayerMovements(this.playerContainer, this.knight, this.dagger, this.cursors, this.playerSpeed, 'knight-walk', 'knight-stop');
+    createEnemyHorizontalMovement(this.pumpkin, this.enemySpeed, 'pumpkin-walk');
   }
 }

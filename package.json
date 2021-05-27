@@ -6,7 +6,7 @@
   "repository": {
       "type": "git",
       "url": "https://github.com/FabrizioRizzi/super-cool-dungeon-game-phaser.git"
-  }
+  },
   "scripts": {
     "start": "parcel src/index.html -p 8000",
     "build": "parcel build src/index.html --out-dir dist"

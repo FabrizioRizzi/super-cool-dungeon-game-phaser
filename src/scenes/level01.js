@@ -25,10 +25,10 @@ export default class Level01 extends Phaser.Scene {
     this.load.image('tileset', 'images/tileset.png');
 
     //LOAD SPRITESHEET
-    this.load.spritesheet('knight', 'images/knight.png', { frameWidth: 16, frameHeight: 32 });
+    this.load.spritesheet('knight', 'images/knight.png', { frameWidth: 16, frameHeight: 22 });
+    this.load.image('dagger', 'images/dagger.png');
     this.load.spritesheet('doc', 'images/doc.png', { frameWidth: 16, frameHeight: 32 });
     this.load.image('redpotion', 'images/redpotion.png');
-    this.load.image('dagger', 'images/dagger.png');
 
     //LOAD MAP
     this.load.tilemapTiledJSON('level01map', 'maps/level01map.json');
@@ -46,18 +46,17 @@ export default class Level01 extends Phaser.Scene {
     /**************** ADD PLAYER CONTAINER FOR KNIGHT AND DAGGER **************************/
     this.playerContainer = this.add
       .container(24, 368)
-      .setSize(20, 22);
+      .setSize(16, 22);
 
     this.physics.world.enableBody(this.playerContainer);
 
     this.knight = this.physics.add
       .sprite(0, 0, 'knight')
-      .setSize(20, 22);
 
-    this.dagger = this.physics.add.image(8, 4, 'dagger');
-
-    this.playerContainer.add(this.knight);
+    this.dagger = this.physics.add.image(5, 0, 'dagger');
+    
     this.playerContainer.add(this.dagger);
+    this.playerContainer.add(this.knight);
 
     /**************** ADD ENEMY **************************/
     this.doc = this.physics.add
@@ -73,17 +72,20 @@ export default class Level01 extends Phaser.Scene {
     /**************** ADD COLLISIONS **************************/
     this.physics.add.collider(this.playerContainer, worldLayer);
     this.physics.add.collider(this.doc, worldLayer, () => this.enemySpeed = -this.enemySpeed);
-    this.physics.add.collider(this.knight, this.redPotion, () => {
+    this.physics.add.collider(this.playerContainer, this.redPotion, () => {
       this.redPotion.disableBody(true, true);
       this.score += 10;
       this.scoreText.setText('Score: ' + this.score);
     });
-    this.physics.add.collider(this.knight, this.doc, () => {
+    this.physics.add.collider(this.dagger, this.doc, () => {
+      this.doc.disableBody(true, true);
+    });
+    this.physics.add.collider(this.playerContainer, this.doc, () => {
       this.scene.start('Level01');
       this.score = 0;
       this.scoreText.setText('Score: ' + this.score);
     });
-    this.physics.add.collider(this.knight, nextLevel, () => this.scene.start('Level02'));
+    this.physics.add.collider(this.playerContainer, nextLevel, () => this.scene.start('Level02'));
    
     /**************** ADD ANIMATIONS **************************/
     createKnightAnimations(this.anims);
@@ -95,6 +97,6 @@ export default class Level01 extends Phaser.Scene {
 
   update() {    
     createPlayerMovements(this.playerContainer, this.knight, this.dagger, this.cursors, this.playerSpeed, 'knight-walk', 'knight-stop');
-    createEnemyHorizontalMovement(this.doc, this.enemySpeed);
+    createEnemyHorizontalMovement(this.doc, this.enemySpeed, 'doc-walk');
   }
 }
