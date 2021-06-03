@@ -4,12 +4,7 @@ const createPlayerMovements = (container, player, weapon, cursors, speed, player
   container.body.setVelocity(0);
 
   //Reset weapon position
-  if (!weapon.flipX) {
-    weapon.setPosition(5, 0);
-  } else {
-    weapon.setPosition(-5, 0);
-  }
-  weapon.setAngle(0);
+  resetWeapon(weapon);
 
   // Normalize and scale the velocity so that this.player can't move faster along a diagonal
   container.body.velocity.normalize().scale(speed);
@@ -45,6 +40,11 @@ const createPlayerMovements = (container, player, weapon, cursors, speed, player
     }
   }
 
+  const duration = cursors.space.getDuration();
+  if (duration > 150) {
+    resetWeapon(weapon);
+  }
+
   /*****************ANIMATIONS ****************/
   if (cursors.left.isDown || cursors.right.isDown || cursors.up.isDown || cursors.down.isDown) {
     player.anims.play(playerWalk, true);
@@ -52,6 +52,15 @@ const createPlayerMovements = (container, player, weapon, cursors, speed, player
     player.anims.play(playerStop, true);
     player.anims.stop();
   }
+}
+
+const resetWeapon = (weapon) => {
+  if (!weapon.flipX) {
+    weapon.setPosition(5, 0);
+  } else {
+    weapon.setPosition(-5, 0);
+  }
+  weapon.setAngle(0);
 }
 
 export default createPlayerMovements;
