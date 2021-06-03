@@ -5,8 +5,7 @@ const createBasicLayers = (map, tileset, input, physics, add) => {
   const aboveLayer = map.createLayer('aboveplayer', tileset, 0, 0);
   const nextLevel = map.createLayer('nextLevel', tileset, 0, 0);
 
-  //worldLayer.setCollisionByProperty({ 'collides': true });
-  worldLayer.setCollision([3, 10, 41, 48, 50, 51, 52, 57, 58, 61, 62, 64, 65, 68, 69, 75]);
+  worldLayer.setCollisionByProperty({ 'collides': true });
   nextLevel.setCollision([46, 83])
 
   aboveLayer.setDepth(10);
