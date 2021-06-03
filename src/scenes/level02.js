@@ -49,8 +49,8 @@ export default class Level02 extends Phaser.Scene {
 
     this.dagger = this.physics.add.image(8, 4, 'dagger');
 
-    this.playerContainer.add(this.knight);
     this.playerContainer.add(this.dagger);
+    this.playerContainer.add(this.knight);
 
     /**************** ADD ENEMY **************************/
     this.pumpkin = this.physics.add
@@ -61,6 +61,9 @@ export default class Level02 extends Phaser.Scene {
     /**************** ADD COLLISIONS **************************/
     this.physics.add.collider(this.playerContainer, worldLayer);
     this.physics.add.collider(this.pumpkin, worldLayer, () => this.enemySpeed = -this.enemySpeed);
+    this.physics.add.collider(this.dagger, this.pumpkin, () => {
+      this.pumpkin.disableBody(true, true);
+    });
     this.physics.add.collider(this.playerContainer, this.pumpkin, () => this.scene.start('Level02'));
     this.physics.add.collider(this.playerContainer, nextLevel, () => this.scene.start('Level01'));
 
